@@ -1,0 +1,14 @@
+.progress {
+  height: 25px;
+  margin-bottom: 10px;
+}
+.progress-bar {
+  font-weight: bold;
+}
+.player-card {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.player-card:hover {
+  transform: translateY(-5px);
+}
