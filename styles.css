@@ -1,14 +1,51 @@
-.progress {
-  height: 25px;
-  margin-bottom: 10px;
+/* Body styling */
+body {
+  background-color: #f8f9fa;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-.progress-bar {
-  font-weight: bold;
+
+/* Swiper carousel container */
+.swiper {
+  width: 100%;
+  padding-top: 100px;
+  padding-bottom: 50px;
 }
-.player-card {
-  cursor: pointer;
-  transition: transform 0.2s;
+
+/* Each carousel slide (card) styling */
+.swiper-slide {
+  background: #fff;
+  width: 300px;
+  height: 500px;
+  border-radius: 15px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
 }
-.player-card:hover {
-  transform: translateY(-5px);
+
+/* Card image fills the upper portion */
+.card-image {
+  width: 100%;
+  height: 60%;
+  background-size: cover;
+  background-position: center;
+}
+
+/* Card content positioned at the bottom with a dark overlay */
+.card-content {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.4);  
+  color: #fff;      
+  font-size: 14px;           
+}
+
+/* Styling for the flag */
+.flag-icon {
+  width: 24px;
+  height: auto;
+  margin-left: 10px;
+  vertical-align: middle;
 }

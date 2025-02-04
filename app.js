@@ -1,161 +1,144 @@
-// Fetch player data
-let players = [];
-
+//fetch data
 async function fetchPlayers() {
-    try {
-        const response = await fetch('data/players2.json');
-        players = await response.json();
-        renderPlayerList(players);
-    } catch (error) {
-        console.error('Error loading player data:', error);
-    }
+  try {
+      const response = await fetch('data/players2.json');
+      players = await response.json();
+      populateCarousel(players);
+      initSwiper();
+  } catch (error) {
+      console.error('Error loading player data:', error);
+  }
 }
 
-// Render player list
-function renderPlayerList(players) {
-  const container = document.getElementById('playerList');
-  container.innerHTML = '';
-
+// Create carousel slides dynamically
+function populateCarousel(players) {
+  const swiperWrapper = document.querySelector('.swiper-wrapper');
+  
   players.forEach(player => {
-      const card = document.createElement('div');
-      card.className = 'col';
-      card.innerHTML = `
-          <div class="card player-card h-100">
-              <div class="card-body">
-                  <h5 class="card-title">${player.name}</h5>
-                  <p class="card-text">
-                      <span class="badge bg-primary">${player.overall_rating} OVR</span>
-                      <span class="badge bg-success">${player.potential} POT</span>
-                  </p>
-                  <p class="card-text">
-                      ${player.positions.split(',').join(' • ')}<br>
-                      ${player.nationality}
-                  </p>
-              </div>
-          </div>
-      `;
-      card.addEventListener('click', () => showPlayerDetails(player));
-      container.appendChild(card);
+    const slideEl = document.createElement('div');
+    slideEl.classList.add('swiper-slide');
+
+    const imageDiv = document.createElement('div');
+    imageDiv.classList.add('card-image');
+    imageDiv.innerHTML = `
+      <img src="${player.image}" alt="${player.name}" width=300 height=500 object-fit= none/>
+    `;
+    const imageUrl = player.image ? player.image : '/images/empty.jpg';
+    imageDiv.style.backgroundImage = `url('${imageUrl}')`;
+
+    const contentDiv = document.createElement('div');
+    contentDiv.classList.add('card-content');
+
+    const flagUrl = getFlagUrl(player.nationality);
+
+    const starRating = renderStarRating(player["skill_moves(1-5)"]);
+
+    contentDiv.innerHTML = `
+      <div class="d-flex align-items-center">
+        <h5 class="mb-0">${player.name}</h5>
+        <img src="${flagUrl}" alt="${player.nationality}" class="flag-icon">
+      </div>
+      <p class="mb-1">Rating: ${player.overall_rating}</p>
+      <p class="mb-1">Position: ${player.positions}</p>
+      <p class="mb-0">Skill Moves: ${starRating}</p>
+    `;
+
+    slideEl.appendChild(imageDiv);
+    slideEl.appendChild(contentDiv);
+
+    slideEl.addEventListener('click', () => {
+      localStorage.setItem('selectedPlayer', JSON.stringify(player));
+      window.location.href = 'details.html';
+    });
+
+    swiperWrapper.appendChild(slideEl);
   });
 }
 
-// Show player details
-function showPlayerDetails(player) {
-  document.getElementById('playerList').classList.add('d-none');
-  document.getElementById('playerDetails').classList.remove('d-none');
-
-  const detailsContainer = document.getElementById('playerDetailsContent');
-  detailsContainer.innerHTML = `
-      <h2>${player.full_name}</h2>
-      <img alt="" data-src="https://cdn.sofifa.net/players/158/023/25_120.png" data-srcset="https://cdn.sofifa.net/players/158/023/25_240.png 2x, https://cdn.sofifa.net/players/158/023/25_360.png 3x" src="https://cdn.sofifa.net/players/158/023/25_120.png" data-root="https://cdn.sofifa.net/" data-type="player" width="120" height="120" class="loaded" srcset="https://cdn.sofifa.net/players/158/023/25_240.png 2x, https://cdn.sofifa.net/players/158/023/25_360.png 3x" data-was-processed="true">
-      <div class="row">
-          <div class="col-md-4">
-              <div class="card mb-3">
-                  <div class="card-body">
-                      <h5 class="card-title">Personal Info</h5>
-                      <p class="card-text">
-                          Age: ${player.age}<br>
-                          Height: ${player.height_cm} cm<br>
-                          Weight: ${player.weight_kgs} kg<br>
-                          Nationality: ${player.nationality}<br>
-                          Preferred Foot: ${player.preferred_foot}
-                      </p>
-                  </div>
-              </div>
-              
-              <div class="card mb-3">
-                  <div class="card-body">
-                      <h5 class="card-title">Financials</h5>
-                      <p class="card-text">
-                          Value: €${parseInt(player.value_euro).toLocaleString()}<br>
-                          Wage: €${parseInt(player.wage_euro).toLocaleString()}/week<br>
-                          Release Clause: €${parseInt(player.release_clause_euro).toLocaleString()}
-                      </p>
-                  </div>
-              </div>
-          </div>
-          
-          <div class="col-md-8">
-              <div class="card mb-3">
-                  <div class="card-body">
-                      <h5 class="card-title">Technical Skills</h5>
-                      <div class="row">
-                          ${renderSkillProgressBars(player)}
-                      </div>
-                  </div>
-              </div>
-              
-              <div class="card">
-                  <div class="card-body">
-                      <h5 class="card-title">Physical Attributes</h5>
-                      <div class="row">
-                          ${renderPhysicalAttributes(player)}
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-  `;
+// Initialize Swiper carousel with coverflow effect
+function initSwiper() {
+  const swiper = new Swiper(".mySwiper", {
+    effect: "coverflow",
+    grabCursor: true,
+    centeredSlides: true,
+    slidesPerView: "auto",
+    coverflowEffect: {
+      rotate: 40,
+      stretch: 0,
+      depth: 100,
+      modifier: 1,
+      slideShadows: false,
+    },
+    loop: true,
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true,
+    },
+  });
 }
 
-function renderSkillProgressBars(player) {
-  const skills = {
-      'Dribbling': player.dribbling,
-      'Ball Control': player.ball_control,
-      'Finishing': player.finishing,
-      'Long Shots': player.long_shots,
-      'Free Kicks': player.freekick_accuracy,
-      'Vision': player.vision
+// Helper function to map nationality to a flag URL
+function getFlagUrl(nationality) {
+  const mapping = {
+    'Argentina': 'ar',
+    'Australia': 'au',
+    'Belgium': 'be',
+    'Brazil': 'br',
+    'Cameroon': 'cm',
+    'Canada': 'ca',
+    'Costa Rica': 'cr',
+    'Croatia': 'hr',
+    'Denmark': 'dk',
+    'Ecuador': 'ec',
+    'England': 'gb', 
+    'France': 'fr',
+    'Germany': 'de',
+    'Ghana': 'gh',
+    'Iran': 'ir',
+    'Italy': 'it',
+    'Japan': 'jp',
+    'Mexico': 'mx',
+    'Morocco': 'ma',
+    'Netherlands': 'nl',
+    'Poland': 'pl',
+    'Portugal': 'pt',
+    'Qatar': 'qa',
+    'Saudi Arabia': 'sa',
+    'Senegal': 'sn',
+    'Serbia': 'rs',
+    'South Korea': 'kr',
+    'Spain': 'es',
+    'Switzerland': 'ch',
+    'Tunisia': 'tn',
+    'Uruguay': 'uy',
+    'USA': 'us',
+    'Egypt': 'eg',
+    // Add or adjust entries as necessary
   };
 
-  return Object.entries(skills).map(([skill, value]) => `
-      <div class="col-md-6 mb-3">
-          <label>${skill}</label>
-          <div class="progress">
-              <div class="progress-bar" 
-                   role="progressbar" 
-                   style="width: ${value}%"
-                   aria-valuenow="${value}" 
-                   aria-valuemin="0" 
-                   aria-valuemax="100">
-                  ${value}
-              </div>
-          </div>
-      </div>
-  `).join('');
+  const countryCode = mapping[nationality] || null;
+  if (countryCode) {
+    return `https://flagcdn.com/64x48/${countryCode}.png`;
+  } else {
+    return 'https://via.placeholder.com/64x48?text=?';
+  }
 }
 
-function renderPhysicalAttributes(player) {
-  const attributes = {
-      'Acceleration': player.acceleration,
-      'Sprint Speed': player.sprint_speed,
-      'Agility': player.agility,
-      'Stamina': player.stamina,
-      'Strength': player.strength,
-      'Balance': player.balance
-  };
+// Helper function to render star rating for skill moves
+function renderStarRating(rating) {
+  const fullStar = '<i class="bi bi-star-fill"></i>';
+  const emptyStar = '<i class="bi bi-star"></i>';
+  let starsHtml = '';
 
-  return Object.entries(attributes).map(([attr, value]) => `
-      <div class="col-md-6 mb-3">
-          <label>${attr}</label>
-          <div class="progress">
-              <div class="progress-bar bg-success" 
-                   role="progressbar" 
-                   style="width: ${value}%"
-                   aria-valuenow="${value}" 
-                   aria-valuemin="0" 
-                   aria-valuemax="100">
-                  ${value}
-              </div>
-          </div>
-      </div>
-  `).join('');
+  const numRating = parseInt(rating, 10) || 0;
+  for (let i = 1; i <= 5; i++) {
+    starsHtml += i <= numRating ? fullStar : emptyStar;
+  }
+  return starsHtml;
 }
 
-// Keep the back button functionality same
-document.getElementById('backButton').addEventListener('click', () => {
-  document.getElementById('playerList').classList.remove('d-none');
-  document.getElementById('playerDetails').classList.add('d-none');
-});
-
-fetchPlayers();
+document.addEventListener('DOMContentLoaded', fetchPlayers);
