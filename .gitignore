@@ -7,3 +7,5 @@
 try.html
 try.js
 try.css
+node_modules/
+config.js

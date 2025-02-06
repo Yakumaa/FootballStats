@@ -50,8 +50,7 @@
     "composure": "96",
     "marking": "33",
     "standing_tackle": "28",
-    "sliding_tackle": "26",
-    "image": "images/messi.png"
+    "sliding_tackle": "26"
   },
   {
     "name": "Neymar Jr",
@@ -104,8 +103,7 @@
     "composure": "94",
     "marking": "27",
     "standing_tackle": "24",
-    "sliding_tackle": "33",
-    "image": "images/neymar.png"
+    "sliding_tackle": "33"
   },
   {
     "name": "R. Lewandowski",
@@ -158,8 +156,7 @@
     "composure": "86",
     "marking": "34",
     "standing_tackle": "42",
-    "sliding_tackle": "19",
-    "image": "images/LEWANDOWSK.jpg"
+    "sliding_tackle": "19"
   },
   {
     "name": "C. Eriksen",
@@ -212,8 +209,7 @@
     "composure": "88",
     "marking": "59",
     "standing_tackle": "57",
-    "sliding_tackle": "22",
-    "image": "images/eriksen.png"
+    "sliding_tackle": "22"
   },
   {
     "name": "P. Pogba",
@@ -266,8 +262,7 @@
     "composure": "87",
     "marking": "63",
     "standing_tackle": "67",
-    "sliding_tackle": "67",
-    "image": "images/pogba.jpg"
+    "sliding_tackle": "67"
   },
   {
     "name": "V. van Dijk",
@@ -320,8 +315,7 @@
     "composure": "87",
     "marking": "90",
     "standing_tackle": "89",
-    "sliding_tackle": "84",
-    "image": "images/van-djik.jpg"
+    "sliding_tackle": "84"
   },
   {
     "name": "K. Mbapp\u00e9",
@@ -374,8 +368,7 @@
     "composure": "86",
     "marking": "34",
     "standing_tackle": "34",
-    "sliding_tackle": "32",
-    "image": "images/kylian-mbappe.png"
+    "sliding_tackle": "32"
   },
   {
     "name": "L. Insigne",
@@ -10074,8 +10067,7 @@
     "composure": "89",
     "marking": "59",
     "standing_tackle": "54",
-    "sliding_tackle": "48",
-    "image": "images/Griezmann.png"
+    "sliding_tackle": "48"
   },
   {
     "name": "M. Salah",
@@ -10128,7 +10120,6 @@
     "composure": "91",
     "marking": "38",
     "standing_tackle": "43",
-    "sliding_tackle": "41",
-    "image": "images/salah.jpg"
+    "sliding_tackle": "41"
   }
 ]
